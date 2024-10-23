@@ -10,10 +10,10 @@ IcoSea is a Icon utility tool to generate flexible icon in `.ts` file from `.tom
 ## Roadmap
 
 - [x] core functionality. generation part
-- [] component generation for library.
-  - [] Svelte
-  - [] react
-  - [] Vue
+- [ ] component generation for library.
+  - [ ] Svelte
+  - [ ] react
+  - [ ] Vue
 
 ## usage
 
