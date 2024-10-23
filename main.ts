@@ -47,7 +47,7 @@ Object.entries(loadedData.icons).forEach(([key, value], index, arr) => {
 const finalData = `
 type ${keysName} = ${keysTypeG};
 
-const ${loadedData.options.name}_obj : Record<MAT_ICON_KEYS,(w:string | number, h:string | number,c:string, cls:string) => string> = { 
+const ${loadedData.options.name}_obj : Record<${keysName},(w:string | number, h:string | number,c:string, cls:string) => string> = { 
 ${objKeysG}
 } 
 
