@@ -7,7 +7,15 @@ IcoSea is a Icon utility tool to generate flexible icon in `.ts` file from `.tom
 - **Deno Version ^2.0.0** (for generation. after generation you can use with any javascript tool)
 - **Toml** support in browser (optional)
 
-### usage
+## Roadmap
+
+- [x] core functionality. generation part
+- [] component generation for library.
+  - [] Svelte
+  - [] react
+  - [] Vue
+
+## usage
 
 **example of .toml file**
 
