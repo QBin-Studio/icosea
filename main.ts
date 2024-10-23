@@ -59,7 +59,7 @@ type ${loadedData.options.func_name}Options = {
 };
 export default function ${loadedData.options.func_name}(name:${keysName}, obj?: ${loadedData.options.func_name}Options): string {
   let {w,h,c,cls} =  { c: "${loadedData.options.color}", h: ${loadedData.options.height}, w: ${loadedData.options.width}, cls: "", ...(obj??{}) };
-  return mat_icon_obj[name](w, h, c, cls);
+  return  ${loadedData.options.name}_obj[name](w, h, c, cls);
 }
 
 `;
