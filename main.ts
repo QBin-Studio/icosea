@@ -1,7 +1,7 @@
 // #!/usr/bin/env -S bun run
-import { exists } from "@std/fs";
-import * as toml from "@std/toml";
-import { dirname } from "@std/path";
+import { exists } from "jsr:@std/fs";
+import * as toml from "jsr:@std/toml";
+import { dirname } from "jsr:@std/path";
 
 console.time("Generation Took");
 const fileLocation = Deno.env.get("ICOSEA_FILE");
