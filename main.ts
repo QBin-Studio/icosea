@@ -5,7 +5,11 @@ import { dirname } from "@std/path";
 
 console.time("Generation Took");
 const fileLocation = Deno.env.get("ICOSEA_FILE");
-if (!fileLocation) throw new Error("Please provide icon.toml file as env variable eg. ICOSEA_FILE=<filePath>");
+if (!fileLocation) {
+  throw new Error(
+    "Please provide icon.toml file as env variable eg. ICOSEA_FILE=<filePath>",
+  );
+}
 
 type TLoadedData = {
   options: {
@@ -22,6 +26,7 @@ type TLoadedData = {
 
 const fileData = await Deno.readTextFile(fileLocation);
 const loadedData = toml.parse(fileData) as TLoadedData;
+const options = loadedData.options;
 
 /* Generating parts */
 let objKeysG = ``;
@@ -29,7 +34,9 @@ let keysTypeG = ``;
 const keysName = `${loadedData.options.name.toUpperCase()}_KEYS`;
 let amountOfIcon = 0;
 Object.entries(loadedData.icons).forEach(([key, value], index, arr) => {
-  const className = `${loadedData.options.global_className || "icosea_icon"} $\{cls}`; // adding className
+  const className = `${
+    loadedData.options.global_className || "icosea_icon"
+  } $\{cls}`; // adding className
 
   if (/class="[^"]*"/gm.test(value)) {
     value = value.replace(/class="[^"]*"/gm, `class="${className}"`);
@@ -38,7 +45,7 @@ Object.entries(loadedData.icons).forEach(([key, value], index, arr) => {
   }
 
   const readyText = value
-    .replace(/width="[^"]*"/gm, 'width="${w}"')
+    .replace(/(?<=\s)width="[^"]*"/gm, 'width="${w}"')
     .replace(/height="[^"]*"/gm, 'height="${h}"')
     .replace(/stroke="[^"]*"/gm, 'stroke="${c}"')
     .replace('fill="none"', "")
@@ -56,11 +63,11 @@ Object.entries(loadedData.icons).forEach(([key, value], index, arr) => {
 const finalData = `
 export type ${keysName} = ${keysTypeG};
 
-const ${loadedData.options.name}_obj : Record<${keysName},(w:string | number, h:string | number,c:string, cls:string) => string> = { 
+const ${options.name}_obj : Record<${keysName},(w:string | number, h:string | number,c:string, cls:string) => string> = { 
 ${objKeysG}
 } 
 
-type ${loadedData.options.func_name}Options = {
+type ${options.func_name}Options = {
   /**width of icon. it will be place to width="<your value>" */
   w?: string | number;
   /**height of icon. it will be place to height="<your value>" */
@@ -70,18 +77,31 @@ type ${loadedData.options.func_name}Options = {
   /**Color of icon. */
   c?: string;
 };
-export default function ${loadedData.options.func_name}(name:${keysName}, obj?: ${loadedData.options.func_name}Options): string {
-  const {w,h,c,cls} =  { c: "${loadedData.options.color}", h: ${loadedData.options.height}, w: ${loadedData.options.width}, cls: "", ...(obj??{}) };
-  return  ${loadedData.options.name}_obj[name](w, h, c, cls);
+export default function ${options.func_name}(name:${keysName}, obj?: ${options.func_name}Options): string {
+  const {w,h,c,cls} =  { c: "${options.color}",h:${
+  unitPurify(options.height)
+},w:${unitPurify(options.width)},cls:"", ...(obj??{})};
+  return  ${options.name}_obj[name](w, h, c, cls);
 }
 
 `;
 
-if (!(await exists(loadedData.options.output))) {
-  await Deno.mkdir(dirname(loadedData.options.output), { recursive: true });
+// function isStr(v:unknown){
+// 	return typeof v ==="string"
+// }
+function unitPurify(u: string | number) {
+  if (typeof u === "string") {
+    return `"${u}"`;
+  } else {
+    return u;
+  }
 }
 
-await Deno.writeTextFile(loadedData.options.output, finalData);
+if (!(await exists(options.output))) {
+  await Deno.mkdir(dirname(options.output), { recursive: true });
+}
 
-console.log(`${amountOfIcon} Generated to ${loadedData.options.output}`);
+await Deno.writeTextFile(options.output, finalData);
+
+console.log(`${amountOfIcon} Generated to ${options.output}`);
 console.timeEnd("Generation Took");
