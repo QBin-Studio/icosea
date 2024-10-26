@@ -1,10 +1,12 @@
 # IcoSea - A Icon Generator tool
 
-IcoSea is a Icon utility tool to generate flexible icon in `.ts` file from `.toml` file
+IcoSea is a Icon utility tool to generate flexible icon in `.ts` file from
+`.toml` file
 
 ### prerequisite
 
-- **Deno Version ^2.0.0** (for generation. after generation you can use with any javascript tool)
+- **Deno Version ^2.0.0** (for generation. after generation you can use with any
+  javascript tool)
 - **Toml** support in browser (optional)
 
 ## Roadmap
@@ -42,7 +44,8 @@ as you see in options we are taking some configuration.
 - `height` - the default height of all icons
 - `width` - the default width of all icons
 - `color` - the default color of all icon
-- `func_name` - callable function name which will return your svg string. like this
+- `func_name` - callable function name which will return your svg string. like
+  this
 - `name` - A name that can be used as reference inside code generation
 - `output` - specify where you want to store the output
 - `global_className` - a global className by which

@@ -2,7 +2,8 @@
   "name": "@bns/icosea",
   "version": "0.0.11",
   "tasks": {
-    "dev": "ICOSEA_FILE=./icons/mat_icon/icon.toml deno run -ERW --watch main.ts"
+    "dev": "ICOSEA_FILE=./icons/mat_icon/icon.toml deno run -ERW --watch main.ts",
+    "format": "deno fmt --ignore=./icons ./**/*"
   },
   "exports": "./main.ts",
   "license": "MIT",
