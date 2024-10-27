@@ -3,7 +3,7 @@
 IcoSea is a Icon utility tool to generate flexible icon in `.ts` file from
 `.toml` file
 
-### prerequisite
+## prerequisite
 
 - **Deno Version ^2.0.0** (for generation. after generation you can use with any
   javascript tool)
@@ -19,7 +19,7 @@ IcoSea is a Icon utility tool to generate flexible icon in `.ts` file from
 
 ## usage
 
-**example of .toml file**
+### exampleof.toml file
 
 ```toml
 [options]
@@ -52,22 +52,26 @@ as you see in options we are taking some configuration.
 
 ### Simple step to generate
 
-1. clone this repo as subModule of git
+1. Install Icosea Globally
 
 ```sh
-git clone https://github.com/mrbns/icosea lib/pkg/icosea
+deno install -gf jsr:@bns/icosea -n icosea
 ```
 
-2. run command using Deno
+2.run command using Deno
 
 ```shell
-ICOSEA_FILE=<icon_file.toml> deno run -A lib/pkg/icosea/main.ts
+icosea -f=<your icon.toml file>
 ```
 
-3. in javscript use your spcefied function name in `icon.toml` <br> in `any.js`
+3.In javscript use your spcefied function name in `icon.toml` <br> in `any.js`
 
 ```js
     import  {icoseaIcon} from "icons/icosea/index.ts"
     iconEl.innerHTML = icoseaIcon("iconKeyNameAsToml", {h:/* height */: 20, w/* width */: "20px", c/* color */:"#fff", cls/* individual className */: "heckingName"})
 ``
 ```
+
+### Note
+
+if you don't specify `height` `width`,`fill`, `stroke` then icosea won't place any value. icosea just make these property dynamic.
