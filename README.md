@@ -74,4 +74,5 @@ icosea -f=<your icon.toml file>
 
 ### Note
 
-if you don't specify `height` `width`,`fill`, `stroke` then icosea won't place any value. icosea just make these property dynamic.
+if you don't specify `height` `width`,`fill`, `stroke` then icosea won't place
+any value. icosea just make these property dynamic.
