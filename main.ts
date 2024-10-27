@@ -1,14 +1,25 @@
-// #!/usr/bin/env -S bun run
+#!/usr/bin/env -S deno run -A
 import { exists } from "@std/fs";
 import * as toml from "@std/toml";
-import { dirname } from "@std/path";
+import { dirname, extname } from "@std/path";
+import { parseArgs } from "@std/cli";
+import { gracefulExit, warn } from "./utility/mod.ts";
+import { bold } from "@std/fmt/colors";
 
 console.time("Generation Took");
-const fileLocation = Deno.env.get("ICOSEA_FILE");
+const args = parseArgs(Deno.args);
+const fileLocation = args["f"] || args["file"];
+
 if (!fileLocation) {
-  throw new Error(
-    "Please provide icon.toml file as env variable eg. ICOSEA_FILE=<filePath>",
-  );
+  gracefulExit("[Error]: Please provide icon.toml file as  parameter -f[ile]=location");
+}
+
+if (extname(fileLocation) !== ".toml") {
+  gracefulExit(`[Error]: Only  ${bold(".toml")} file supported as icon file`);
+}
+
+if (!(await exists(fileLocation))) {
+  gracefulExit("[Error]: Provided .toml file doesn't exist");
 }
 
 type TLoadedData = {
@@ -32,24 +43,38 @@ const options = loadedData.options;
 let objKeysG = ``;
 let keysTypeG = ``;
 const keysName = `${loadedData.options.name.toUpperCase()}_KEYS`;
+const regexes = {
+  class: /class="[^"]*"/gm,
+  width: /(?<=\s)width=['"][^'"}]*['"]/gm,
+  height: /(?<=\s)height=['"][^'"}]*['"]/gm,
+  stroke: /stroke=['"][^'"}]*['"]/gm,
+  fill: /stroke=['"][^'"}]*['"]/gm,
+};
 let amountOfIcon = 0;
-Object.entries(loadedData.icons).forEach(([key, value], index, arr) => {
-  const className = `${
-    loadedData.options.global_className || "icosea_icon"
-  } $\{cls}`; // adding className
 
-  if (/class="[^"]*"/gm.test(value)) {
+Object.entries(loadedData.icons).forEach(([key, value], index, arr) => {
+  const className = `${loadedData.options.global_className || "icosea_icon"} $\{cls}`; // adding className
+
+  if (regexes.class.test(value)) {
     value = value.replace(/class="[^"]*"/gm, `class="${className}"`);
   } else {
     value = value.replace("<svg", `<svg class="${className}"`);
   }
 
+  if (!regexes.width.test(value)) {
+    warn(`[icon]: ${bold(key)} doesn't has any Width attribute`);
+  }
+
+  if (!regexes.height.test(value)) {
+    warn(`[icon]: ${bold(key)} doesn't has any height attribute`);
+  }
+
   const readyText = value
-    .replace(/(?<=\s)width="[^"]*"/gm, 'width="${w}"')
-    .replace(/height="[^"]*"/gm, 'height="${h}"')
-    .replace(/stroke="[^"]*"/gm, 'stroke="${c}"')
+    .replace(regexes.width, 'width="${w}"')
+    .replace(regexes.height, 'height="${h}"')
+    .replace(regexes.stroke, 'stroke="${c}"')
     .replace('fill="none"', "")
-    .replace(/fill="[^"]*"/gm, 'fill="${c}"');
+    .replace(regexes.fill, 'fill="${c}"');
 
   const functionText = `(w, h, c,cls) => \`${readyText}\``;
 
@@ -78,9 +103,7 @@ type ${options.func_name}Options = {
   c?: string;
 };
 export default function ${options.func_name}(name:${keysName}, obj?: ${options.func_name}Options): string {
-  const {w,h,c,cls} =  { c: "${options.color}",h:${
-  unitPurify(options.height)
-},w:${unitPurify(options.width)},cls:"", ...(obj??{})};
+  const {w,h,c,cls} =  { c: "${options.color}",h:${unitPurify(options.height)},w:${unitPurify(options.width)},cls:"", ...(obj??{})};
   return  ${options.name}_obj[name](w, h, c, cls);
 }
 

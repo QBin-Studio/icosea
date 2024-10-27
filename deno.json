@@ -3,13 +3,15 @@
   "version": "0.0.11",
   "tasks": {
     "dev": "ICOSEA_FILE=./icons/mat_icon/icon.toml deno run -ERW --watch main.ts",
-    "format": "deno fmt --ignore=./icons ./**/*"
+    "format": "deno fmt --ignore=./icons ./**/*",
+    "lint": "deno lint "
   },
   "exports": "./main.ts",
   "license": "MIT",
   "imports": {
     "@std/assert": "jsr:@std/assert@1",
-    "@std/fmt": "jsr:@std/fmt@^1.0.2",
+    "@std/cli": "jsr:@std/cli@^1.0.6",
+    "@std/fmt": "jsr:@std/fmt@^1.0.3",
     "@std/fs": "jsr:@std/fs@^1.0.4",
     "@std/path": "jsr:@std/path@^1.0.6",
     "@std/toml": "jsr:@std/toml@^1.0.1"
@@ -21,6 +23,14 @@
       "./test.ts",
       "./node_modules/**/*",
       "./icons/**/*"
+    ]
+  },
+  "lint": {
+    "exclude": [
+      "./icons",
+      "./.vscode",
+      "./.gitignoer",
+      "./lefthook.yml"
     ]
   }
 }

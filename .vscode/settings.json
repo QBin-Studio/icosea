@@ -1,3 +1,4 @@
 {
-  "cSpell.words": ["icosea"]
+  "cSpell.words": ["icosea"],
+  "deno.enable": true
 }

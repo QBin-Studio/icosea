@@ -17,3 +17,5 @@ pre-commit:
   commands:
     format:
       run: deno task format
+    linter:
+      run: deno lint
