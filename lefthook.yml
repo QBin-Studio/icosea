@@ -15,7 +15,9 @@
 pre-commit:
   parallel: true
   commands:
-    format:
-      run: deno task format
     linter:
       run: deno lint
+    format:
+      run: deno task format
+    restagging:
+      run: git add .

@@ -11,7 +11,8 @@
     "jsr:@std/path@*": "1.0.6",
     "jsr:@std/path@^1.0.6": "1.0.6",
     "jsr:@std/toml@^1.0.1": "1.0.1",
-    "npm:@types/node@*": "22.5.4"
+    "npm:@types/node@*": "22.5.4",
+    "npm:oxlint@latest": "0.10.3"
   },
   "jsr": {
     "@std/assert@1.0.6": {
@@ -49,10 +50,47 @@
     }
   },
   "npm": {
+    "@oxlint/darwin-arm64@0.10.3": {
+      "integrity": "sha512-1zcWSqr9DmhbSrV1SEZRywp81CNq8ZidIcFGB8tGUMnlBNYiHnxyHHh2GIZsr1C2exmkBUGXruM1P8eQ9BWGuQ=="
+    },
+    "@oxlint/darwin-x64@0.10.3": {
+      "integrity": "sha512-lPAXCwYb+wZgjWAMhtPjGn7n1h8HvTulj6XCRyIgUu/aTGDRtnsae9IPXsJ9LJwYu5wyzkcWow0nhlIxkDaZ+w=="
+    },
+    "@oxlint/linux-arm64-gnu@0.10.3": {
+      "integrity": "sha512-OmzpNVRwhjuI/RtoG4ROrwxRICTLoBB3ua4/Mh2iC3RelOog2xhlAAJHenKtzgQXNmebWof/0EckFpMfID7fMw=="
+    },
+    "@oxlint/linux-arm64-musl@0.10.3": {
+      "integrity": "sha512-QQzlIW6rKOoGZK19gz/kbAbIFROJEV6ER0smcoBA7FzwsQ/ji796qx3TdITelgJwJt5x+OG5ZHztIjyzC871ZQ=="
+    },
+    "@oxlint/linux-x64-gnu@0.10.3": {
+      "integrity": "sha512-m4ZUKsQNXxXmHUYBEaO7KN83DPVsLTq8KaRO4qj0Cs1RgD8O3YYCCDewVe8x/9yskQrCCTP4mL0G4IZgDJ3Gpg=="
+    },
+    "@oxlint/linux-x64-musl@0.10.3": {
+      "integrity": "sha512-XKvAUYxE9bHjvWE4wmOlIdaVQN7pzZAH3Rx1EFg0MfGBVjyDm+uf0P3so+gx2PowqvBnBneL9tth2AS3Bcjl6g=="
+    },
+    "@oxlint/win32-arm64@0.10.3": {
+      "integrity": "sha512-8xhYVvnwrveMHyXAgQAaDjJWFij4mZP6jtMlBIjk6pZSrjUzX+9o7Wh1zgH6kYApmcPDAzomYJLSYvyF5PzluA=="
+    },
+    "@oxlint/win32-x64@0.10.3": {
+      "integrity": "sha512-dQiHruLd42aock1WHp5BFvRvaz+Pe436dQkcmlCVmInhmOjRpDEVKPUUWamrImV6S8VM63bn4Jp60vpprjJQdQ=="
+    },
     "@types/node@22.5.4": {
       "integrity": "sha512-FDuKUJQm/ju9fT/SeX/6+gBzoPzlVCzfzmGkwKvRHQVxi4BntVbyIwf6a4Xn62mrvndLiml6z/UBXIdEVjQLXg==",
       "dependencies": [
         "undici-types"
+      ]
+    },
+    "oxlint@0.10.3": {
+      "integrity": "sha512-af5u5+s4adyszujeILPDRGwix0o5M1+qR1eqxNSmJhTKVRX7xdrT9s2rpNpMYxQmPyWRhC/+5Gqyb+f/PtbK9A==",
+      "dependencies": [
+        "@oxlint/darwin-arm64",
+        "@oxlint/darwin-x64",
+        "@oxlint/linux-arm64-gnu",
+        "@oxlint/linux-arm64-musl",
+        "@oxlint/linux-x64-gnu",
+        "@oxlint/linux-x64-musl",
+        "@oxlint/win32-arm64",
+        "@oxlint/win32-x64"
       ]
     },
     "undici-types@6.19.8": {
