@@ -11,7 +11,9 @@ const args = parseArgs(Deno.args);
 const fileLocation = args["f"] || args["file"];
 
 if (!fileLocation) {
-  gracefulExit("[Error]: Please provide icon.toml file as  parameter -f[ile]=location");
+  gracefulExit(
+    "[Error]: Please provide icon.toml file as  parameter -f[ile]=location",
+  );
 }
 
 if (extname(fileLocation) !== ".toml") {
@@ -53,7 +55,9 @@ const regexes = {
 let amountOfIcon = 0;
 
 Object.entries(loadedData.icons).forEach(([key, value], index, arr) => {
-  const className = `${loadedData.options.global_className || "icosea_icon"} $\{cls}`; // adding className
+  const className = `${
+    loadedData.options.global_className || "icosea_icon"
+  } $\{cls}`; // adding className
 
   if (regexes.class.test(value)) {
     value = value.replace(regexes.class, `class="${className}"`);
@@ -103,7 +107,9 @@ type ${options.func_name}Options = {
   c?: string;
 };
 export default function ${options.func_name}(name:${keysName}, obj?: ${options.func_name}Options): string {
-  const {w,h,c,cls} =  { c: "${options.color}",h:${unitPurify(options.height)},w:${unitPurify(options.width)},cls:"", ...(obj??{})};
+  const {w,h,c,cls} =  { c: "${options.color}",h:${
+  unitPurify(options.height)
+},w:${unitPurify(options.width)},cls:"", ...(obj??{})};
   return  ${options.name}_obj[name](w, h, c, cls);
 }
 
