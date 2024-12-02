@@ -10,3 +10,11 @@ export function gracefulExit(text?: string) {
     Deno.exit(1);
   }
 }
+
+export function unitPurify(u: string | number) {
+  if (typeof u === "string") {
+    return `"${u}"`;
+  } else {
+    return u;
+  }
+}
