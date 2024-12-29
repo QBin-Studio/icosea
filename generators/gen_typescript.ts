@@ -4,6 +4,7 @@ import type { TomlIconDataType } from "../utility/toml_parser.ts";
 import regexes from "../constant/regexes.ts";
 import { exists } from "@std/fs";
 import { dirname } from "@std/path";
+import { Parser } from "htmlparser2";
 
 export default async function (data: TomlIconDataType): Promise<{
   generated: number;
@@ -17,7 +18,15 @@ export default async function (data: TomlIconDataType): Promise<{
 
   let amountOfIcon = 0;
 
+  const parser = new Parser({
+    onopentag: function (name, attributes) {
+      console.log(name);
+      console.log(attributes);
+    },
+  });
+
   Object.entries(data.icons).forEach(([key, value], index, arr) => {
+    parser.write(value);
     const className = `${o.global_className || "icosea_icon"} $\{cls}`; // adding className
 
     if (regexes.class.test(value)) {

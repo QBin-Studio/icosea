@@ -14,7 +14,8 @@
     "@std/fmt": "jsr:@std/fmt@^1.0.3",
     "@std/fs": "jsr:@std/fs@^1.0.4",
     "@std/path": "jsr:@std/path@^1.0.6",
-    "@std/toml": "jsr:@std/toml@^1.0.1"
+    "@std/toml": "jsr:@std/toml@^1.0.1",
+    "htmlparser2": "npm:htmlparser2@^10.0.0"
   },
   "publish": {
     "exclude": [
