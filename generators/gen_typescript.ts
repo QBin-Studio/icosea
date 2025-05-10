@@ -16,6 +16,8 @@ function processSVG(
     node: DefaultTreeAdapterTypes.ChildNode,
   ): DefaultTreeAdapterTypes.ChildNode {
     if (node.nodeName === "svg") {
+      let classFound = false;
+
       node.attrs = node.attrs.map((attr) => {
         if (attr.name === "width") {
           return {
@@ -32,6 +34,7 @@ function processSVG(
         }
 
         if (attr.name === "class") {
+          classFound = true;
           return {
             name: "class",
             value: "${cls}",
@@ -47,6 +50,10 @@ function processSVG(
 
         return attr;
       });
+
+      if (!classFound) {
+        node.attrs.push({ name: "class", value: "${cls}" });
+      }
     } else if ("attrs" in node) {
       node.attrs = node.attrs.map((attr) => {
         if (attr.name === "fill") {

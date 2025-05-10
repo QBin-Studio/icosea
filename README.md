@@ -2,8 +2,6 @@
 
 IcoSea is a Icon utility tool to generate from **SVG** to flexible **typescript** reusable function.
 
-`.toml` file
-
 ## build prerequisite
 
 - **Deno Version ^2.0.0** (build dependencies)
@@ -68,13 +66,12 @@ icosea -f=<your icon.toml absolute path>
 ```js
     import  {icoseaIcon} from "icons/icosea/index.ts"
     iconEl.innerHTML = icoseaIcon("iconKeyNameAsToml", {h:/* height */: 20, w/* width */: "20px", c/* color */:"#fff", cls/* individual className */: "note_outline"})
-``
 ```
 
 ### Note
 
 if your icon svg content doesn't has `height` `width`,`fill`, `stroke` attributes then icosea won't place
-any value. icosea just make these property dynamic if these property exist.
+any value. icosea just make these property dynamic if these property exist. but if class doesn't exit it will add a extra class property to **SVG** element.
 
 happy coding.🤞 <br>
 made by [@MrBns (Mr Binary Sniper)](https://mrbns.dev)
