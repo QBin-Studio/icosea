@@ -9,6 +9,7 @@ import { serialize } from "parse5";
 
 function processSVG(
   svg: string,
+  options: TomlIconDataType["options"],
 ) {
   const parsedSvg = parseFragment(svg);
 
@@ -37,7 +38,7 @@ function processSVG(
           classFound = true;
           return {
             name: "class",
-            value: "${cls}",
+            value: options.global_className + " ${cls} ",
           } as DefaultTreeAdapterTypes.Element["attrs"][number];
         }
 
@@ -52,7 +53,10 @@ function processSVG(
       });
 
       if (!classFound) {
-        node.attrs.push({ name: "class", value: "${cls}" });
+        node.attrs.push({
+          name: "class",
+          value: options.global_className + " ${cls} ",
+        });
       }
     } else if ("attrs" in node) {
       node.attrs = node.attrs.map((attr) => {
@@ -127,7 +131,7 @@ export default async function GenTypescript(data: TomlIconDataType): Promise<{
 
     let processedSvg = ``;
     if (value.startsWith("<svg")) {
-      processedSvg = processSVG(value);
+      processedSvg = processSVG(value, o);
     }
 
     object_key_value += `"${key}": (w, h, c,cls) => \`${processedSvg}\`,\n`;
