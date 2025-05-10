@@ -1,16 +1,113 @@
-import { bold } from "@std/fmt/colors";
-import { unitPurify, warn } from "../utility/mod.ts";
+import { unitPurify } from "../utility/mod.ts";
 import type { TomlIconDataType } from "../utility/toml_parser.ts";
-import regexes from "../constant/regexes.ts";
 import { exists } from "@std/fs";
 import { dirname } from "@std/path";
-import { Parser } from "htmlparser2";
+import { parseFragment } from "parse5";
+import type { DefaultTreeAdapterTypes } from "parse5";
+import { serialize } from "parse5";
+// import { Parser } from "htmlparser2";
 
-export default async function (data: TomlIconDataType): Promise<{
+function processSVG(
+  svg: string,
+) {
+  const parsedSvg = parseFragment(svg);
+
+  function modifySvg(
+    node: DefaultTreeAdapterTypes.ChildNode,
+  ): DefaultTreeAdapterTypes.ChildNode {
+    if (node.nodeName === "svg") {
+      node.attrs = node.attrs.map((attr) => {
+        if (attr.name === "width") {
+          return {
+            name: "width",
+            value: "${w}",
+          } as DefaultTreeAdapterTypes.Element["attrs"][number];
+        }
+
+        if (attr.name === "height") {
+          return {
+            name: "height",
+            value: "${h}",
+          } as DefaultTreeAdapterTypes.Element["attrs"][number];
+        }
+
+        if (attr.name === "class") {
+          return {
+            name: "class",
+            value: "${cls}",
+          } as DefaultTreeAdapterTypes.Element["attrs"][number];
+        }
+
+        if (attr.name === "fill") {
+          return {
+            name: "fill",
+            value: "${c}",
+          } as DefaultTreeAdapterTypes.Element["attrs"][number];
+        }
+
+        return attr;
+      });
+    } else if ("attrs" in node) {
+      node.attrs = node.attrs.map((attr) => {
+        if (attr.name === "fill") {
+          return {
+            name: "fill",
+            value: "${c}",
+          } as DefaultTreeAdapterTypes.Element["attrs"][number];
+        }
+
+        if (attr.name === "stroke") {
+          return {
+            name: "stroke",
+            value: "${c}",
+          } as DefaultTreeAdapterTypes.Element["attrs"][number];
+        }
+
+        return attr;
+      });
+    }
+
+    if ("childNodes" in node) {
+      node.childNodes = node.childNodes.map(modifySvg);
+    }
+
+    return node;
+  }
+
+  if (parsedSvg.childNodes.length) {
+    parsedSvg.childNodes = parsedSvg.childNodes.map(modifySvg);
+  }
+
+  const serialized = serialize(parsedSvg);
+
+  return serialized;
+}
+
+export default async function GenTypescript(data: TomlIconDataType): Promise<{
   generated: number;
 }> {
   /* Generating parts */
   const o = data.options;
+
+  if (!(await exists(o.output))) {
+    // Creating output Directory incase directory is not exist.
+    // its only create directory not output file;
+    await Deno.mkdir(dirname(o.output), { recursive: true });
+  }
+
+  if (await exists(o.output)) {
+    await Deno.remove(o.output);
+  }
+
+  const output_file = await Deno.open(o.output, {
+    read: true,
+    write: true,
+    append: true,
+    create: true,
+  });
+
+  const output_writer = output_file.writable.getWriter();
+
   let object_key_value = ``; // eg. (icon:()=>string)
   let keysTypeG = ``; //eg. (type key = "name1" | "name2")
 
@@ -18,48 +115,22 @@ export default async function (data: TomlIconDataType): Promise<{
 
   let amountOfIcon = 0;
 
-  const parser = new Parser({
-    onopentag: function (name, attributes) {
-      console.log(name);
-      console.log(attributes);
-    },
-  });
-
   Object.entries(data.icons).forEach(([key, value], index, arr) => {
-    parser.write(value);
-    const className = `${o.global_className || "icosea_icon"} $\{cls}`; // adding className
-
-    if (regexes.class.test(value)) {
-      value = value.replace(regexes.class, `class="${className}"`);
-    } else {
-      value = value.replace("<svg", `<svg class="${className}"`);
-    }
-
-    if (!regexes.width.test(value)) {
-      warn(`[icon]: ${bold(key)} doesn't has any Width attribute`);
-    }
-
-    if (!regexes.height.test(value)) {
-      warn(`[icon]: ${bold(key)} doesn't has any height attribute`);
-    }
-
-    const readyText = value
-      .replace(regexes.width, 'width="${w}"')
-      .replace(regexes.height, 'height="${h}"')
-      .replace(regexes.stroke, 'stroke="${c}"')
-      .replace('fill="none"', "")
-      .replace(regexes.fill, 'fill="${c}"');
-
-    const functionText = `(w, h, c,cls) => \`${readyText}\``;
-
     keysTypeG += `"${key}" ${arr.length - 1 === index ? "" : " | "}`;
 
-    object_key_value += `"${key}": ${functionText},\n`;
+    let processedSvg = ``;
+    if (value.startsWith("<svg")) {
+      processedSvg = processSVG(value);
+    }
+
+    object_key_value += `"${key}": (w, h, c,cls) => \`${processedSvg}\`,\n`;
+
     amountOfIcon++;
   });
 
-  const dataToWriteInFile = `
-export type ${keysName} = ${keysTypeG};
+  // The top part of files;
+  await output_writer.write(
+    new TextEncoder().encode(`export type ${keysName} = ${keysTypeG};
 
 const ${o.name}_obj : Record<${keysName},(w:string | number, h:string | number,c:string, cls:string) => string> = { 
 ${object_key_value}
@@ -76,29 +147,15 @@ type ${o.func_name}Options = {
   c?: string;
 };
 export default function ${o.func_name}(name:${keysName}, obj?: ${o.func_name}Options): string {
-  const {w,h,c,cls} =  { c: "${o.color}",h:${unitPurify(o.height)},w:${unitPurify(o.width)},cls:"", ...(obj??{})};
+  const {w,h,c,cls} =  { c: "${o.color}",h:${unitPurify(o.height)},w:${
+      unitPurify(o.width)
+    },cls:"", ...(obj??{})};
   return  ${o.name}_obj[name](w, h, c, cls);
 }
-`;
+`),
+  );
 
-  if (!(await exists(data.options.output))) {
-    // Creating output Directory incase directory isnot exist;
-    await Deno.mkdir(dirname(o.output), { recursive: true });
-  }
-
-  if (await exists(o.output)) {
-    await Deno.remove(o.output);
-  }
-
-  const output_file = await Deno.open(o.output, {
-    read: true,
-    write: true,
-    append: true,
-    create: true,
-  });
-
-  const output_writer = output_file.writable.getWriter();
-  output_writer.write(new TextEncoder().encode(dataToWriteInFile));
+  output_writer.close();
   return {
     generated: amountOfIcon,
   };

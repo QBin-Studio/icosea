@@ -1,42 +1,41 @@
 # IcoSea - A Icon Generator tool
 
-IcoSea is a Icon utility tool to generate flexible icon in `.ts` file from
+IcoSea is a Icon utility tool to generate from **SVG** to flexible **typescript** reusable function.
+
 `.toml` file
 
-## prerequisite
+## build prerequisite
 
-- **Deno Version ^2.0.0** (for generation. after generation you can use with any
-  javascript tool)
-- **Toml** support in browser (optional)
+- **Deno Version ^2.0.0** (build dependencies)
+- **Toml** support in browser (for icons listing. can be ignore in .gitignore but not recommended)
+
+ps: all requisite is only to build output file. and output file is totally dependency free. it means no deno or toml at production only pure typescript.;
 
 ## Roadmap
 
 - [x] core functionality. generation part
 - [ ] component generation for library.
-  - [ ] Svelte
+  - [-] Svelte - (can be use by `{@html icon("name", ...options)}`)
   - [ ] react
   - [ ] Vue
 
 ## usage
 
-### exampleof.toml file
+### example of.toml file
 
 ```toml
 [options]
-height = 20
-width = 20
-color = "currentColor"
-func_name = "icoseaIcon"
-name = "mat_icon"
-output = "icons/icosea/index.ts"
-global_className = "mat_icons"
+height = "1em" # can be controlled via font-size in html
+width = "1em"
+color = "currentColor" # can be controlled via color css property.
+func_name = "icons"
+name = "icosea_icons"
+output = "src/assets/icons/index.ts"
+global_className = "icosea_global_cls"
 
 
 [icons]
-3g = """<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M4.33998 6.32671H5.07665V1.84004H3.08998V2.57671H4.33998V6.32671ZM7.25665 6.32671H10.4933V5.59004H7.99331V4.40421H10.4933V1.84004H7.25665V2.57671H9.75665V3.76337H7.25665V6.32671ZM2.25665 12.16H2.99331V8.41004H4.33998V10.91H5.07665V8.41004H6.42331V12.16H7.15998V7.67337H2.25665V12.16ZM8.50665 12.16H9.24331V10.91H11.7433V7.67337H8.50665V12.16ZM9.24331 10.1734V8.41004H11.0066V10.1734H9.24331ZM0.333313 13.6667V0.333374H13.6666V13.6667H0.333313Z" fill="black"/>
-</svg>
-"""
+note_outline = """<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path d="M16.5 4H8a4 4 0 0 0-4 4v8.5a4 4 0 0 0 4 4h6.843a4 4 0 0 0 2.829-1.172l1.656-1.656a4 4 0 0 0 1.172-2.829V8a4 4 0 0 0-4-4"/><path d="M20.5 14H17a3 3 0 0 0-3 3v3.5M8 8h7.5M8 12h5"/></g></svg>"""
 ```
 
 as you see in options we are taking some configuration.
@@ -55,24 +54,27 @@ as you see in options we are taking some configuration.
 1. Install Icosea Globally
 
 ```sh
-deno install -gf jsr:@bns/icosea -n icosea
+deno install -gfr -A jsr:@bns/icosea -n icosea
 ```
 
 2.run command using Deno
 
 ```shell
-icosea -f=<your icon.toml file>
+icosea -f=<your icon.toml absolute path>
 ```
 
 3.In javscript use your spcefied function name in `icon.toml` <br> in `any.js`
 
 ```js
     import  {icoseaIcon} from "icons/icosea/index.ts"
-    iconEl.innerHTML = icoseaIcon("iconKeyNameAsToml", {h:/* height */: 20, w/* width */: "20px", c/* color */:"#fff", cls/* individual className */: "heckingName"})
+    iconEl.innerHTML = icoseaIcon("iconKeyNameAsToml", {h:/* height */: 20, w/* width */: "20px", c/* color */:"#fff", cls/* individual className */: "note_outline"})
 ``
 ```
 
 ### Note
 
-if you don't specify `height` `width`,`fill`, `stroke` then icosea won't place
-any value. icosea just make these property dynamic.
+if your icon svg content doesn't has `height` `width`,`fill`, `stroke` attributes then icosea won't place
+any value. icosea just make these property dynamic if these property exist.
+
+happy coding.🤞 <br>
+made by [@MrBns (Mr Binary Sniper)](https://mrbns.dev)

@@ -15,7 +15,8 @@
     "@std/fs": "jsr:@std/fs@^1.0.4",
     "@std/path": "jsr:@std/path@^1.0.6",
     "@std/toml": "jsr:@std/toml@^1.0.1",
-    "htmlparser2": "npm:htmlparser2@^10.0.0"
+    "htmlparser2": "npm:htmlparser2@^10.0.0",
+    "parse5": "npm:parse5@^7.2.1"
   },
   "publish": {
     "exclude": [
