@@ -1,6 +1,6 @@
 {
   "name": "@bns/icosea",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "tasks": {
     "dev": " deno run -ERW --watch main.ts -f=./icons/mat_icon/icon.toml",
     "format": "deno fmt --ignore=./icons ./**/*",
