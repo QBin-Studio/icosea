@@ -9,7 +9,7 @@ import chalk from "chalk";
 const starting = Date.now();
 
 const args = parseArgs(process.argv);
-const filelocation = args["f"] || args["file"];
+const filelocation = args.f || args.file;
 
 if (!filelocation) {
 	gracefulExit(

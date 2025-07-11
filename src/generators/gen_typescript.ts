@@ -37,7 +37,7 @@ function processSVG(svg: string, options: TomlIconDataType["options"]) {
 					classFound = true;
 					return {
 						name: "class",
-						value: options.global_className + " ${cls} ",
+						value: options.global_className + "${cls} ",
 					} as DefaultTreeAdapterTypes.Element["attrs"][number];
 				}
 
