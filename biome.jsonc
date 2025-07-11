@@ -3,6 +3,9 @@
 	"vcs": {
 		"useIgnoreFile": true
 	},
+	"files": {
+		"includes": ["**", "!dist", "!./icons/mat_icon/index.ts"]
+	},
 	"formatter": {
 		"enabled": true
 	},

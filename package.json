@@ -1,20 +1,22 @@
 {
 	"name": "icosea",
-	"version": "1.0.0",
+	"version": "1.0.0-rc.0",
 	"description": "IcoSea is a Icon utility tool to generate from **SVG** to flexible **typescript** reusable function.",
 	"type": "module",
 	"scripts": {
 		"build": "tsdown",
-		"lint": ""
+		"lint": "biome lint",
+		"format": "biome format --write",
+		"prepublish": "pnpm build && publint"
 	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/mrbns/icosea.git"
 	},
-	"bin": "./dist/bin/icosea.js",
+	"bin": "./dist/icosea.js",
 	"keywords": [],
 	"author": "",
-	"license": "ISC",
+	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/mrbns/icosea/issues"
 	},
@@ -23,12 +25,17 @@
 		"@biomejs/biome": "^2.1.1",
 		"@types/node": "^24.0.12",
 		"lefthook": "^1.12.2",
+		"publint": "^0.3.12",
 		"typescript": "^5.8.3"
 	},
 	"dependencies": {
 		"@iarna/toml": "^2.2.5",
 		"chalk": "^5.4.1",
-		"js-toml": "^1.0.1",
 		"parse5": "^8.0.0"
-	}
+	},
+	"files": [
+		"./dist",
+		"./package.json",
+		"./README.md"
+	]
 }
