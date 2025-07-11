@@ -11,7 +11,6 @@ export function parseArgs(args: string[]) {
 
 			if (splitted.length < 2) {
 				console.log(chalk.red("Invalid flag ", flag));
-				continue;
 			} else {
 				parsed[splitted[0]] = splitted[1];
 			}

@@ -1,4 +1,5 @@
 pre-commit:
+  parallel: false
   jobs:
     - name: "Formatting Staged Files"
       run: npx biome format --write {staged_files}
@@ -8,5 +9,6 @@ pre-commit:
     - name: "Checking Errors on Staged files"
       run: "npx biome lint --fix {staged_files}"
       glob: "*.{js,ts,jsx,tsx,toml}"
+      stage_fixed: true
       exclude:
         - "./icons/mat_icon/index.ts"
