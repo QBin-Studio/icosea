@@ -1,23 +1,12 @@
-# EXAMPLE USAGE:
-#
-#   Refer for explanation to following link:
-#   https://github.com/evilmartians/lefthook/blob/master/docs/configuration.md
-#
-# pre-push:
-#   commands:
-#     packages-audit:
-#       tags: frontend security
-#       run: yarn audit
-#     gems-audit:
-#       tags: backend security
-#       run: bundle audit
-#
 pre-commit:
-  parallel: true
-  commands:
-    linter:
-      run: deno lint
-    format:
-      run: deno task format
-    restagging:
-      run: git add .
+  jobs:
+    - name: "Formatting Staged Files"
+      run: npx biome format --write {staged_files}
+      stage_fixed: true
+      glob: "*"
+
+    - name: "Checking Errors on Staged files"
+      run: "npx biome lint --fix {staged_files}"
+      glob: "*.{js,ts,jsx,tsx,toml}"
+      exclude:
+        - "./icons/mat_icon/index.ts"

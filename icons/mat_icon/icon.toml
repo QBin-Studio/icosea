@@ -35,4 +35,4 @@ instagram = """<svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns
 </svg>
 """
 # car = "iconify@duo-icon:car"
-down-circle = """<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2c5.52 0 10 4.48 10 10s-4.48 10-10 10S2 17.52 2 12S6.48 2 12 2m1 10V8h-2v4H8l4 4l4-4z"/></svg>"""
+# down-circle = """<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2c5.52 0 10 4.48 10 10s-4.48 10-10 10S2 17.52 2 12S6.48 2 12 2m1 10V8h-2v4H8l4 4l4-4z"/></svg>"""
